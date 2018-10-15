@@ -17,23 +17,20 @@ function varargout = preprocFFTbins(S, params)
 % Spreproc : Preprocessed stimulus
 % params : filled-out param struct
 % 
-% See also preprocFFT3 for a WIP of doing this w/ 3D Fourier transform (to
-% account for motion, too)
-% 
 % ML 2015.01
 
 dparams.class = 'preprocFFTbins';
-dparams.screen_degrees = 21.32;
-dparams.angle_bins = [0,180]; %[0,10;90,10]; % max 180
+dparams.screen_degrees = 21.32; % Needs to be adjusted for each display
+dparams.angle_bins = [0:45:135;45*ones(1,4)]'; % bin centers, widths
 dparams.angle_bin_centers = true; % True = treat columns as center, width; false = columns are min,max
-dparams.sfreq_bins = [0,5;5,inf]; % 5 cycles / degree and higher - high freq only
-% without this normalization, everything is correlated with everything;
-% some images just have more SF contrast than others. These two options go
-% some way toward fixing that (the latter (normalize_by_image), set to
-% 'zscore', seems best)
-dparams.normalize_by_sf = false; 
-dparams.normalize_by_image = false; 
-dparams.keep_contrast_channel = false;
+dparams.sfreq_bins = [0,5;5,inf]; % above/below 5 cycles / degree 
+dparams.normalize_by_sf = false;
+% Without the following normalization, all spatial frequency channels are 
+% highly correlated with each other, because some images just have more 
+% spaital frequency contrast than others. This normalization helps.
+dparams.normalize_by_image = 'L2';
+dparams.keep_contrast_channel = true;
+
 % Fill in default parameters
 if ~exist('params','var')
     params = struct;
