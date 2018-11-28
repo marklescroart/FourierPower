@@ -11,4 +11,5 @@ end
 
 % preprocess colorspace to change to grayscale
 [gray_ims, cparams] = preprocColorSpace(ims);
+% process Fourier power. 'features' output is (n_features x n_images) in size
 [features, fparams] = preprocFFTbins(gray_ims);
